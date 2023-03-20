@@ -1,0 +1,83 @@
+===================================================================================================================================================
+
+Note Laravel 8
+M Reza Khalafi Notes 
+20/03/2023
+
+===================================================================================================================================================
+
+<?= 1. Sintaks Blade ?>
+
+    {{ nama }}
+
+<?= 2. Layouting ?>
+
+    Buat file utama pada views/layout dan taruh pada file template utamanya
+    @yield('container')
+
+    Taruh pada file replacablenya
+    @extends('layouts/main') = Boleh pake / dan .
+    @section('container')
+        <h1>Halaman Home!</h1>
+    @endsection
+
+    Untuk pemisahan component bisa buat folder di views dan panggil dengan
+    @include('partials.navbar')
+
+<?= 3. Dump ?>
+
+    @dd($blog_posts)
+
+<?= 4. Foreach ?>
+
+    @foreach ($posts as $post)
+        <article>
+            <h2>
+                <a href="posts/{{ $post['slug'] }}">{{ $post['judul'] }}</a>
+            </h2>
+            <h5>{{ $post['author'] }}</h5>
+            <p>{{ $post['body'] }}</p>
+        </article>
+    @endforeach
+
+<?= 5. Model ?>
+
+    Bisa download extension Laravel Artisan lalu F1 dan ketik make Model 
+    atau 
+    Ketik di terminal php artisan make:model UserModel
+
+    Format variabel = private static $blog_post
+    Format class = public static function all()
+    Return variabel = return self::$blog_post;
+    Get return from function all() (For use in another function) = $posts = static::all();
+
+<?= 6. Collection ?>
+
+    Fungsi keren untuk manipulasi array seperti JS
+    collect($array)
+
+    $posts->first(); = Ambil array pertama
+    $posts->firstWhere('slug',$slug); = Ambil array where
+
+<?= 7. Controller ?>
+
+    Bisa download extension Laravel Artisan lalu F1 dan ketik make Controller 
+    atau 
+    php artisan make:controller ControllerName
+
+    Buat method sesuai dengan kebutuhan CRUD dan pindahkan return view dari routes kesini
+    public function index()
+    {
+        return view('blog', [
+            "name" => "M Reza Khalafi"
+        ]);
+    }
+
+    Ubah return view di routes menjadi pemanggilan controller dan methodnya
+    Route::get('/blog', [PostController::class, 'index']);
+    
+
+<?= 8. ?>
+
+
+===================================================================================================================================================

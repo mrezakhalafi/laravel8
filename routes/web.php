@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\PostController;
+use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,16 +16,23 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+
     return view('index', [
         "name" => "M Reza Khalafi",
-        "email" => "mrezakhalafi@yahoo.com"
+        "email" => "mrezakhalafi@yahoo.com",
+        "title" => "Home"
     ]);
 });
 
 Route::get('/about', function () {
-    return view('about');
+
+    return view('about', [
+        "name" => "M Reza Khalafi",
+        "email" => "mrezakhalafi@yahoo.com",
+        "title" => "About"
+    ]);
 });
 
-Route::get('/contact', function () {
-    return view('contact');
-});
+Route::get('/blog', [PostController::class, 'index']);
+
+Route::get('/posts/{slug}', [PostController::class, 'show']);
