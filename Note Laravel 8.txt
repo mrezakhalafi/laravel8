@@ -6,9 +6,22 @@ M Reza Khalafi Notes
 
 ===================================================================================================================================================
 
+Struktur 
+
+1) app/Models/ = Model
+2) app/Http/Controllers/ = Controller
+3) public/ = Tempat menyimpan assets CSS, JS, IMG
+4) resources/views/ = Views
+5) routes/ = Routing
+6) .env & composer.json (APP_ENV = local, production)
+
+===================================================================================================================================================
+
 <?= 1. Sintaks Blade ?>
 
     {{ nama }}
+    Kalo ada tag html di dalamnya gunakan 
+    {!! $post->body !!}
 
 <?= 2. Layouting ?>
 
@@ -40,11 +53,15 @@ M Reza Khalafi Notes
         </article>
     @endforeach
 
+    Bisa juga pake $post->judul
+
 <?= 5. Model ?>
 
     Bisa download extension Laravel Artisan lalu F1 dan ketik make Model 
     atau 
     Ketik di terminal php artisan make:model UserModel
+    atau dengan migration (Database folder)
+    artisan make:model -m UserModel
 
     Format variabel = private static $blog_post
     Format class = public static function all()
@@ -77,7 +94,85 @@ M Reza Khalafi Notes
     Route::get('/blog', [PostController::class, 'index']);
     
 
-<?= 8. ?>
+<?= 8. Migration ?>
 
+    php artisan migrate
+    Import semua DB pada database/migrations 
+    php artisan migrate:rollback = Menghapus semua import tadi
+    php artisan migrate:fresh = Menjalakan fungsi down() dan up() sekaligus (Update tabel)
+
+<?= 9. DB ?>
+
+    Buka database/migrations/
+    Deklarasikan pada function up()
+    $table->string('nama');
+    $table->string('nama')->unique(); = Unique
+    $table->string('nama')->default('Reza); = Dengan default 
+    $table->timestamp('publish_at')->nullable() = Boleh kosong
+
+<?= 10. Eloquent ORM (Tinker) ?>
+
+    Fungsi untuk memetakan DB ke object
+    Mengisi data dari terminal tanpa menyentuh DB Editor
+    Tulis di terminal php artisan tinker
+    
+    Cara pertama :
+    Lalu akan masuk ke shell, buat class disitu 
+        $user = new App\Model\User
+    Lalu isi classnya sesuai nama kolomnya
+        $user->name = 'Leonardo Dicaprio'
+        $user->email = 'Leonardo@gmail.com';
+        $user->password = bcrypt('12345');
+    Untuk save ke DB gunakan 
+        $user->password = bcrypt('12345');
+    Bisa menampilkan data dengan 
+        $user->all();
+    Juga spesifik data dengan 
+        $user->find(2) = Cari dengan ID = 2
+        $user->findOrFail(200) = Cari dengan ID yang tidak ada (Memunculkan Error)
+        $user->first() = Cari data pertama
+        $user->pluck('title') = Hanya tampilkan kolom title semua data
+    Bisa begitu karena jika mengisi dari Tinker, akan otomatis menjadi collection
+
+    Cara kedua :
+    Post::create([
+        'title' => 'Judul keempat',
+        'excerp' => 'Subdetail artikel keempat',
+        'body' => 'Isi konten yang panjang pokoknya.'
+    ])
+    Dengan syarat mengisi pada Model Post 
+    protected $fillable = ['title', 'excerp', 'body']
+
+<?= 11. Class 2 ?>
+
+    protected $fillable = ['title', 'excerp', 'body'] = Field yang boleh di isi manual 
+    protected $guarded = ['id'] = Field yang di jagain, gaboleh di isi manual
+
+<?= 12. Update Model ?>
+
+    Cara satu :
+    Post::find(3)->update([
+        "title" => "Judul ketiga berubah ya"
+    ])
+    Cara kedua :
+    Post::where("title","Judul Ketiga")->update([
+        "excerp" => "Excerp ketiga berubah ya"
+    ])
+
+<?= 13. Implict Binding ?>
+
+    Mengubah mekanisme mencari detail bukan berdasarkan ID 
+    Ubah di routes 
+        Route::get('/posts/{post:slug}', [PostController::class, 'detail']);
+    Kalo {post} aja dia mencari ID tapi kalo di tambahin {post:slug} akan mencari kolom slug 
+    Ubah di controller 
+    public function show(Post $post)
+    {
+        return view('posts', [
+            "title" => "Single Post",
+            "posts" => $post
+        ]);
+    }
+    Gaperlu pake "posts" => Post::find($id) karena $post udah menjadi object dari Post
 
 ===================================================================================================================================================
