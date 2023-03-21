@@ -15,7 +15,8 @@ class PostController extends Controller
             "name" => "M Reza Khalafi",
             "email" => "mrezakhalafi@yahoo.com",
             "title" => "Blog",
-            "posts" => Post::all()
+            // "posts" => Post::all()
+            "posts" => Post::latest()->get()
         ]);
     }
 
@@ -25,7 +26,7 @@ class PostController extends Controller
         return view('posts', [
             "title" => "Single Post",
             // "posts" => Post::find($id)
-            "posts" => $post
+            "post" => $post
         ]);
     }
 }

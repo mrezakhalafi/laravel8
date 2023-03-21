@@ -61,7 +61,7 @@ Struktur
     atau 
     Ketik di terminal php artisan make:model UserModel
     atau dengan migration (Database folder)
-    artisan make:model -m UserModel
+    artisan make:model -mfs UserModel (-m migration, -f factory, -s seeder)
 
     Format variabel = private static $blog_post
     Format class = public static function all()
@@ -109,6 +109,7 @@ Struktur
     $table->string('nama')->unique(); = Unique
     $table->string('nama')->default('Reza); = Dengan default 
     $table->timestamp('publish_at')->nullable() = Boleh kosong
+    $table->foreignId('category_id') = Foreign key untuk Eloquent Relationship
 
 <?= 10. Eloquent ORM (Tinker) ?>
 
@@ -174,5 +175,72 @@ Struktur
         ]);
     }
     Gaperlu pake "posts" => Post::find($id) karena $post udah menjadi object dari Post
+
+<?= 14. Eloquent Relationship ?>
+
+    Penggabungan kedua tabel / model tanpa join seperti mySQL, menggunakan fitur disediakan Laravel
+
+    OneToOne = 1 Postingan hanya punya 1 Category = belongsTo
+    Buka model tabel utama, dan buat nama function tabel yang ingin di join
+    class Post extends Model
+    {
+        function category(){
+            $this->belongsTo(Category::class);
+        }
+    }
+    Bisa diakses pada tinker sebagai 
+    $post->category = Yang harusnya cuma return angka 1, jadi bisa menampilkan id 1, nama category dll, seperti left join 
+    Bisa juga begini $post->category->name
+
+    OneToMany = 1 Category bisa punya banyak Post 
+    return $this->hasMany(Post::class);
+    $category->$post = Kerennya join bisa dibalik, 1 category ini itu punya post apa aja
+
+<?= 15. Seeder ?>
+
+    Mengisi data dari laravel
+    Posisi folder ada di /database/seeders/DatabaseSeeder.php
+    php artisan make:seeder 
+    Bikin datanya 
+    Post::create([
+        "title" => "Post 1",
+        "slug" => "post-1",
+        "category_id" => "1",
+        "user_id" => "1",
+        "excerp" => "Singkat 1",
+        "body" => "Panjang 1"
+    ])
+    Tulis di terminal php artisan db:seed 
+    Atau php artisan migrate:fresh --seed = Untuk drop semua tabel, create table, include datanya
+
+<?= 16. Factory ?>
+
+    Mengisi data fake lalu insert secara batch
+    Posisi folder ada di /database/factories/
+    php artisan make:factory PostFactory
+    Masukan pada return di function definition
+    return [
+        "title" => $this->faker->sentence(mt_rand(2, 8)),
+        "slug" => $this->faker->slug(),
+        "excerp" => $this->faker->paragraph(),
+        "body" => $this->faker->paragraph(mt_rand(5, 10)),
+        "category_id" => 1,
+        "user_id" => 1
+    ];
+    Ubah pada DatabaseSeeder
+    User::factory(5)->create(); 5 = Jumlah data
+    Bisa dijalankan dengan php artisan migrate:fresh --seed
+
+    Ubah di config/app.php 'faker_locale' untuk merubah ke Local ID 
+    Atau buat di .env menjadi 'faker_locale' => env('FAKER_LOCALE','us_US');
+    Dan di .env = FAKER_LOCALE=id_ID
+
+<?= 17. Sorting Data Terbaru ?>
+
+    Ubah pada Controller
+    "posts" => Post::latest()->get()
+
+<?= 18. ?>
+
 
 ===================================================================================================================================================
