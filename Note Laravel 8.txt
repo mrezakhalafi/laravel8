@@ -188,6 +188,8 @@ Struktur
             $this->belongsTo(Category::class);
         }
     }
+    FYI nama category akan mengambil category_id kalo ingin berbeda tambahkan script ini
+        return $this->belongsTo(User::class, 'user_id');
     Bisa diakses pada tinker sebagai 
     $post->category = Yang harusnya cuma return angka 1, jadi bisa menampilkan id 1, nama category dll, seperti left join 
     Bisa juga begini $post->category->name
