@@ -11,10 +11,8 @@ class PostController extends Controller
     public function index()
     {
 
-        return view('blog', [
-            "name" => "M Reza Khalafi",
-            "email" => "mrezakhalafi@yahoo.com",
-            "title" => "Blog",
+        return view('post', [
+            "title" => "All Post",
             // "posts" => Post::all()
             "posts" => Post::latest()->get()
         ]);

@@ -2,7 +2,7 @@
     <div class="container">
         <a class="navbar-brand" href="/">Navbar</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
@@ -13,7 +13,7 @@
                     <a class="nav-link {{ $title == 'About' ? 'active' : ''}}" href="/about">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link {{ $title == 'Blog' ? 'active' : ''}}" href="/blog">Post</a>
+                    <a class="nav-link {{ $title == 'All Post' ? 'active' : ''}}" href="/post">Post</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ $title == 'List Category' ? 'active' : ''}}" href="/categories">Category</a>
@@ -22,4 +22,3 @@
         </div>
     </div>
 </nav>
-
