@@ -6,7 +6,7 @@
 @foreach ($posts as $post)
 <article class="mb-3 pb-4 border-bottom">
     <h4>
-        <a class="text-decoration-none" href="posts/{{ $post->slug }}">{{ $post->title }}</a>
+        <a class="text-decoration-none" href="/posts/{{ $post->slug }}">{{ $post->title }}</a>
     </h4>
     <div class="mb-4">
         <span>By <a class="text-decoration-none" href="/authors/{{ $post->author->username }}">{{ $post->author->name }}</a> </span>

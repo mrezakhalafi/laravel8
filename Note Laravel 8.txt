@@ -242,7 +242,27 @@ Struktur
     Ubah pada Controller
     "posts" => Post::latest()->get()
 
-<?= 18. ?>
+<?= 18. Clockwork ?>
 
+    Tools untuk tracing performance web dari sisi query dan lainnya
+    Install di dalam project website laravel
+        composer require itsgoingd/clockwork
+    Install extension di chrome clockwork terus Inspect Element
+
+<?= 19. Eiger Loading ?>
+
+    Dalam kasus load Post dengan relasi Author dan Category 
+    Maka akan ngeloop 3x query di 1 Post x jumlah Post
+    Oleh karena itu tambahkan function with (['Array model yand di relasi']) 
+    Agar cukup 3x query aja total
+        "posts" => Post::with(['author', 'category'])->latest()->get()
+
+<?= 20. Lazy Eiger Loading ?>
+
+    Sama seperti Eiger Loading bedanya ini kasus untuk Implict Binding
+    Yang loadnya bukan di controller, melainkan di routes 
+        Route::get('/authors/{author:username}', function (User $author) {
+    Tambahkan juga di setelah function ->load('Model yang direlasi')
+        "posts" => $author->post->load('category', 'author')
 
 ===================================================================================================================================================
