@@ -21,6 +21,7 @@ Route::get('/', function () {
 
     return view('index', [
         "name" => "M Reza Khalafi",
+        "active" => "home",
         "email" => "mrezakhalafi@yahoo.com",
         "title" => "Home"
     ]);
@@ -30,6 +31,7 @@ Route::get('/about', function () {
 
     return view('about', [
         "name" => "M Reza Khalafi",
+        "active" => "about",
         "email" => "mrezakhalafi@yahoo.com",
         "title" => "About"
     ]);
@@ -44,6 +46,7 @@ Route::get('/categories', function () {
 
     return view('categories', [
         "title" => "List Category",
+        "active" => "category",
         "categories" => Category::all()
     ]);
 });
@@ -52,6 +55,7 @@ Route::get('/categories/{category:slug}', function (Category $category) {
 
     return view('post', [
         "title" => "Post by Category : " . $category->name,
+        "active" => "category",
         "posts" => $category->posts->load('category', 'author')
     ]);
 });
@@ -63,6 +67,7 @@ Route::get('/authors/{author:username}', function (User $author) {
 
     return view('post', [
         "title" => "Post By Author : " . $author->name,
+        "active" => "author",
         "posts" => $author->post->load('category', 'author')
     ]);
 });

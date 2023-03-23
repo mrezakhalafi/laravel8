@@ -256,6 +256,10 @@ Struktur
     Oleh karena itu tambahkan function with (['Array model yand di relasi']) 
     Agar cukup 3x query aja total
         "posts" => Post::with(['author', 'category'])->latest()->get()
+    Atau bisa juga declare di model 
+        protected $with = ['author', 'category'];
+    Sehingga bisa begini saja 
+        "posts" => Post::latest()->get()
 
 <?= 20. Lazy Eiger Loading ?>
 
@@ -264,5 +268,28 @@ Struktur
         Route::get('/authors/{author:username}', function (User $author) {
     Tambahkan juga di setelah function ->load('Model yang direlasi')
         "posts" => $author->post->load('category', 'author')
+
+<?= 21. If Else ?>
+
+    @if ($posts->count() > 0)
+    @elseif () 
+    @else 
+    @endif
+
+<?= 22. Date ago (Carbon) ?>
+
+    $posts[0]->created_at->diffForHumans()
+    Result = 1 day ago
+
+<?= 23. Unsplash Generate Image By Slug ?>
+
+    <img src="https://source.unsplash.com/1200x400/?{{ $posts[0]->category->name }}" class="card-img-top" alt="...">
+
+<?= 24. Foreach Skip ?>
+
+    Loop semua kecuali index pertama 
+    @foreach ($posts->skip(1) as $post)
+
+<?= 25. ?>
 
 ===================================================================================================================================================
