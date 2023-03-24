@@ -290,6 +290,78 @@ Struktur
     Loop semua kecuali index pertama 
     @foreach ($posts->skip(1) as $post)
 
-<?= 25. ?>
+<?= 25. Searching ?>
+
+    Mengambil keyword dengan request('search') = Search adalah name
+    Tulis pada controller 
+    $posts = Post::latest(); = Deklarasikan di awal
+    if (request('search')) {
+            $posts->where('title', 'like', '%' . request('search') . '%')
+                ->orWhere('body', 'like', '%' . request('search') . '%'); = Buat if kalo ada search/tidak
+        }
+    return view('post', [
+        "posts" => $posts->get() = Tinggal get aja 
+    ]);
+
+<?= 26. Local Scopes ?>
+
+    Agar filter dilakukan pada model dan bukan pada controller, controller hanya menangkap query, model yang filter
+    Buat function pada model
+    public function scopeFilter($query, array $filters)
+    {
+        // Return query
+    }
+    Dengan nama harus scopeFilter
+    $query adalah search yang ditangkap dari controller dan $filters digunakan untuk fungsi No.27
+    Lalu pada controller tambahkan dari "posts" => Post::latest()->get()
+    Menjadi "posts" => Post::latest()->filter(request(['search']))->get()
+
+<?= 27. When ?>
+
+    Pengganti isset = fungsi dari Laravel
+        $query->when($filters['search'] ?? false, function ($query, $search) {
+            return $query->where('title', 'like', '%' . $search . '%')
+                ->orWhere('body', 'like', '%' . $search . '%');
+        });
+    Ketika $filters['search'] gaada return false, kalo ada jalankan function dengan input $query dan   
+    variabel baru $search replikasi dari $filters['search']
+
+
+<?= 28. Double Search (WhereHas) ?>
+
+    Mencari keyword dan category (In case buka list category, buka category 1, terus search, harus sesuai keyword dan category 1)
+    Tambahkan pada controller $_GET yang mau ditangkap 
+        "posts" => Post::latest()->filter(request(['search', 'category']))->get()
+    Pada model fungsi scopeFilter tambahkan 
+         $query->when($filters['category'] ?? false, function ($query, $category) {
+            return $query->whereHas('category', function ($query) use ($category) {
+                $query->where('slug', $category);
+            });
+        });
+    Dengan pembacaan when() jika ada input category, dan whereHas() untuk mengecek apakah ada relasi Post ini dengan Category maka 
+    tambahkan $query->where
+
+    Atau pakai arrow function jadi gaperlu use ($category)
+    $query->when($filters['author'] ?? false,fn ($query, $author) =>
+        $query->whereHas('author', fn ($query) =>
+            $query->where('username', $author)
+        )
+    );
+    
+<?= 29. Pagination ?>
+
+    Pakai fungsi ->paginate(10) pada controller 
+    "posts" => Post::latest()->filter(request(['search', 'category', 'author']))->paginate(7) = Untuk limit 7
+    Untuk tombol paginatenya gunakan 
+        {{ $posts->links() }}
+    Desainnya menggunakan tailwind, kalo mau ubah ke Bootstrap bisa config lagi
+    Ke file app/Providers/AppServiceProvider.php lalu tambahkan  
+    {
+        Paginator::useBootstrap();
+    }
+    Bisa bungkus dengan div links() nya untuk more customization
+
+<?= 30. ?>
+
 
 ===================================================================================================================================================
