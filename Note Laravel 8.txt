@@ -361,7 +361,87 @@ Struktur
     }
     Bisa bungkus dengan div links() nya untuk more customization
 
-<?= 30. ?>
+<?= 30. Link CSS ?>
 
+    <link rel="stylesheet" href="/css/style.css">
+
+<?= 31. CSRF Form ?>
+
+    <form action="/register" method="POST">
+        @csrf
+    </form
+
+<?= 32. Mengambil Data Dari Form ?>
+
+    Buat form yang mengarah ke dirinya sendiri tapi dengan method POST 
+    Buat routes di controller 
+    Bisa gunakan return request()->all();
+    Atau 
+    public function store(Request $request)
+    {
+        return $request->all();
+    }
+
+<?= 33. Form Validate ?>
+
+    $request->validate([
+        'name' => 'required|max:255', = Bisa bentuk pipeline
+        'username' => ['required', 'min:3', 'max:255', 'unique:users'], = Bisa bentuk array
+        'email' => 'required|email:dns|unique:users', = Email:ds artinya dengan format @ nya
+        'password' => 'required|min:5|max:255'
+    ]);
+    Tulis fungsi jika lolos validasi di bawahnya (Tidak akan lanjut jika validasi gagal)
+
+<?= 34. Show Validate Error ?>
+
+    Untuk alert merah pada input 
+        class="form-control rounded-top @error('name') is-invalid @enderror"
+    Untuk menampilkan pesan error 
+        @error('name')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
+
+<?= 35. Show Old Value ?>
+
+    <input type="text" name="name" value="{{ old('email')}}">
+
+<?= 36. Insert Data To DB ?>
+
+    Import dulu 
+        use App\Models\User;
+    Masukan semua validasi ke $validatedData
+    Jangan lupa untuk menambahkan kolom ke Modal User pada $fillable atau #guarded
+    Insert dengan 
+        User::create($validatedData);
+    Lalu return jika berhasil 
+        return redirect('/login');
+
+    Untuk mengubah isi seperti ingin validasi dulu bisa taruh di sebelum ::create 
+        $validatedData['password'] = bcrypt($validatedData['password']);
+
+<?= 37. Password Encrypt ?>
+
+    Bisa 
+        $validatedData['password'] = bcrypt($validatedData['password']);
+    Atau pakai fungsi laravel 
+        $validatedData['password'] = Hash::make($validatedData['password']);
+    Tapi harus import dulu 
+        use Illuminate\Support\Facades\Hash;
+
+<?= 38. Flashdata ?>
+
+    Sebelum return bisa tulis 
+        $request->session()->flash('success', 'Registration successfull! Please login');
+    Atau langsung di return nya 
+        return redirect('/login')->with('success', 'Registration successfull! Please login');
+    Lalu tampilkan dengan 
+        @if (session()->has('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success')}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
 
 ===================================================================================================================================================
