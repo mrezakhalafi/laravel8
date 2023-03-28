@@ -438,10 +438,12 @@ Struktur
         return redirect('/login')->with('success', 'Registration successfull! Please login');
     Lalu tampilkan dengan 
         @if (session()->has('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success')}}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success')}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         @endif
+
+<?= 39.  ?>
 
 ===================================================================================================================================================

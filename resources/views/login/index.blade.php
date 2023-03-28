@@ -16,15 +16,25 @@
 
         <main class="form-signin w-100 m-auto">
             <h1 class="h3 mb-3 fw-normal text-center">Please Login</h1>
-            <form>
-          
+            <form action="/login" method="POST">
+              @csrf
               <div class="form-floating">
-                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" placeholder="name@example.com" autofocus value="{{ old('email') }}">
                 <label for="floatingInput">Email address</label>
+                @error('email')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+                @enderror
               </div>
               <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" id="password" placeholder="Password">
                 <label for="floatingPassword">Password</label>
+                @error('password')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+                @enderror
               </div>
           
               <button class="w-100 btn btn-lg btn-primary" type="submit">Login</button>
