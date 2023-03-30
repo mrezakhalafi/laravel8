@@ -444,6 +444,63 @@ Struktur
             </div>
         @endif
 
-<?= 39.  ?>
+<?= 39. Login ?>
+
+    Gunakan Auth dahulu
+        use Illuminate\Support\Facades\Auth;
+    Login dengan 
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate(); = Menghindari pura2 masuk dengan session yang sama
+            return redirect()->intended('/dashboard'); = Agar melewati middlewarenya
+        }
+    Dimana $credential adalah array dari validasi
+    Dan jika gagal login arahkan di bawahnya dengan 
+        return back()->with('loginError', 'Login Failed!');
+    Agar bisa ditampilkan flashmessage di HTML nya 
+
+<?= 40. Middleware Authentication ?>
+
+    Filter http request sebelum dijalankan (Sebelum route)
+
+    Gunakan di web.php 
+    Route::get('/login', [LoginController::class, 'index'])->middleware('guest');
+    Guest = Tidak Login, Auth = login
+    Bisa dilihat dan diganti di Http/Kernel.php bagian protected $routeMiddleware
+
+    Merubah redirect jika tidak memenuhi syarat ada di Providers/RouteServiceProvider.php 
+    Ganti public const HOME = '/';
+
+<?= 41. Middleware Using in HTML ?>
+
+    Section jika middleware auth terpenuhi (Sudah login) maka akan tampil yang atas, jika belum login tampil yang bawah
+    @auth 
+        <h1>Welcome Back, {{ auth()->user()->name }}</h1>
+    @else 
+        <button>Login</button>
+    @endauth
+    auth()->user()->name = Untuk menampilkan namanya
+
+<?= 42. Logout ?>
+
+    Jadikan tombol logout sebagai form 
+        <form action="/logout" method="POST">
+            @csrf
+            <button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right"></i>Logout</button>
+        </form>
+    Buat function logout di Controller dan ketikan 
+        Auth::logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+        return redirect('/'); = 4 baris template dari dokumentasi resmi Laravel
+
+<?= 43. Default redirect Middleware ?>
+
+    Jika tidak memenuhi syarat middleware Auth (Khusus Auth)
+    App/Http/Middleware/Authenticate.php 
+    return route('login');
+    Untuk mengubahnya tambahkan ->name('login') pada web.php
+    Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
+    
+<?= 44. ?>
 
 ===================================================================================================================================================
