@@ -28,12 +28,12 @@
                     Welcome Back, {{ auth()->user()->name }}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="/dashboard"><i class="bi bi-grid-1x2"></i>My Dashboard</a></li>
+                    <li><a class="dropdown-item" href="/dashboard"><i class="bi bi-grid-1x2" style="margin-right:10px"></i>My Dashboard</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <form action="/logout" method="POST">
                             @csrf
-                            <button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right"></i>Logout</button>
+                            <button type="submit" class="dropdown-item"><i class="bi bi-box-arrow-right" style="margin-right:10px"></i>Logout</button>
                         </form>
                     </li>
                     </ul>
