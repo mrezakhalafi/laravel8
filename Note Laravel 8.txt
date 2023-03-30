@@ -495,11 +495,10 @@ Struktur
 
 <?= 43. Default redirect Middleware ?>
 
-    Jika tidak memenuhi syarat middleware Auth (Khusus Auth)
-    App/Http/Middleware/Authenticate.php 
-    return route('login');
+    Jika terdapat error (/login) itu karena tidak memenuhi syarat middleware Auth (Khusus Auth), secara default diarahkan pada 
+        App/Http/Middleware/Authenticate.php baris return route('login');
     Untuk mengubahnya tambahkan ->name('login') pada web.php
-    Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
+        Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
     
 <?= 44. ?>
 
