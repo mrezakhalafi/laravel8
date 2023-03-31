@@ -500,6 +500,46 @@ Struktur
     Untuk mengubahnya tambahkan ->name('login') pada web.php
         Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
     
-<?= 44. ?>
+<?= 44. Feather Icons ?>
+
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+    <span data-feather="file-text"></span>
+
+<?= 45. Resource Controllers ?>
+
+    Tekan F1 dan ketikan Artisan : Make Controller 
+    Tapi pilih yang Type = Resource 
+    Dan reference Model masukan nama Model yang di inginkan
+
+    Nanti akan terbentuk 1 controller dengan CRUD di dalamnya
+    Sehingga di web.php bisa dipanggil dengan 
+        Route::resource('/dashboard/posts', DashboardPostController::class)->middleware('auth');
+    Akan otomatis mencari fungsi index() seperti CI
+
+<?= 46. Navbar Active Link ?>
+
+    <a class="nav-link {{ Request::is('dashboard/posts') ? 'active' : '' }}" href="/dashboard/posts">
+    Dengan pembacaan, jika URL nya adalah dashboard/posts maka tampilkan class active
+    Jadi tidak perlu mengirim data dari controller
+
+<?= 47. Loop Variable ?>
+
+    Variabel di dalam foreach untuk mengetahui posisi 
+        <td> {{ $loop->iteration }} </td> = Dimulai dari 1
+        <td> {{ $loop->index }} </td> = Dimulai dari 0
+    Selebihnya banyak ada di dokumentasi
+
+<?= 48. Resource Controllers Problem Handle ?>
+
+    Untuk handle masalah ketika menggunakan Route::resource() maka tidak bisa menggunakan Route::resource('/dashboard/posts/{post:slug}');
+    Karena di dalamnya sudah ada CRUD default 
+    Maka buat fungsi baru pada Class 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+    Hasilnya otomatis ketika membuka URL ('dashboard/posts/) apapun itu (CRUD) akan selalu menyertakan slug
+
+<?= 49.  ?>
 
 ===================================================================================================================================================
