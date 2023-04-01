@@ -605,4 +605,13 @@ Struktur
         })
 
 
+<?= 51. Limit String ?>
+
+    Include dulu 
+        use Illuminate\Support\Str;
+    Gunakan dengan 
+        $validateData['excerp'] = Str::limit($request->body, 100, '...');
+
+<?= 52. ?>
+
 ===================================================================================================================================================
