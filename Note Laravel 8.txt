@@ -695,6 +695,10 @@ Struktur
     'image' = name, 'post-images' = folder yang otomatis dibuat jika tidak ada, hanya berjalan jika ada request file image
     Upload seperti biasa Post::create($validateData);
 
+    Untuk Edit Image tetap gunakan 
+        $validateData['image'] = $request->file('image')->store('post-images');
+    Otomatis replace nama kolom di DB dan upload imagenya
+
 <?= 60. Show Image From DB ?>
 
     @if ($post->image)
@@ -706,6 +710,15 @@ Struktur
     @endif
     Jika ada tampilkan gambar dari DB, jika tidak ada tampilkan gambar default
 
-<?= 61. ?>
+<?= 61. Delete Image From Storage ?>
+
+    Kirimkan nama dari file lamanya
+        <input type="hidden" name="oldImage" value="{{ $post->image }}">
+    Lalu hapus dengan
+        if ($request->oldImage) {
+            Storage::delete($request->oldImage); = Hapus by path
+        }
+
+<?= 62. ?>
 
 ===================================================================================================================================================
