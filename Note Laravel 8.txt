@@ -786,6 +786,14 @@ Struktur
 
 <? 66. Hosting ?>
 
-    
+    Upload ke web hosting dengan struktur sebagai berikut 
+        public_html = Berisi folder public yang bisa diakses user 
+        laravel = Berisi 1 project laravel sisa selain folder public 
+    Masuk ke public/index.php dan edit pada bagian 
+        require __DIR__.'/../vendor/autoload.php' menjadi require __DIR__.'/../laravel/vendor/autoload.php';
+        $app = require_once __DIR__.'/../bootstrap/app.php' menjadi $app = require_once __DIR__.'/../laravel/bootstrap/app.php';
+    Untuk konfigurasi selanjutnya masuk ke file .env dan ubah 
+        APP_URL = Menjadi URL saat ini 
+        DB_HOST (Default Localhost), DB_DATABASE, DB_USERNAME, DB_PASSWORD
 
 ===================================================================================================================================================
