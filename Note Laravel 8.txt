@@ -355,7 +355,7 @@ Struktur
     Untuk tombol paginatenya gunakan 
         {{ $posts->links() }}
     Desainnya menggunakan tailwind, kalo mau ubah ke Bootstrap bisa config lagi
-    Ke file app/Providers/AppServiceProvider.php lalu tambahkan  
+    Ke file app/Providers/AppServiceProvider.php lalu tambahkan pada boot()
     {
         Paginator::useBootstrap();
     }
@@ -517,6 +517,8 @@ Struktur
     Akan otomatis mencari fungsi index() seperti CI
 
     Otomatis detect, method get = index, method post = store dll
+
+    Kalo ditambah Route::resource()->except('show'); = Akan exclude fungsi tersebut (Optional)
 
 <?= 46. Navbar Active Link ?>
 
@@ -719,6 +721,71 @@ Struktur
             Storage::delete($request->oldImage); = Hapus by path
         }
 
-<?= 62. ?>
+<?= 62. Authorization ?>
+
+    Hapus middleware dan tambahkan pada controller function index() sebelum return view 
+        if (auth()->guest()) {
+            abort(403);
+        } = Jika tidak login
+        if (auth()->user()->username !== 'mrezakhalafi') {
+            abort(403);
+        } = Jika bukan admin (mrezakhalafi)
+    Bisa juga begini 
+        if (!auth()->check() || auth()->user()->username !== 'mrezakhalafi') {
+            abort(403);
+        }
+    Dengan auth()->check() = Pengecekan apakah user sudah login.belum, jika sudah = true
+    Tapi cara tersebut tidak efisien karena harus di copy ke setiap function, maka perlu penyesuaian di bawah
+
+<?= 63. Make Middleware ?>
+
+    Ketikan php artisan middleware NamaMiddleware atau F1 Make Middleware
+    Maka akan masuk .php baru ke folder Http/Middleware
+    Masukan ke dalam function handle()
+         if (!auth()->check() || auth()->user()->username !== 'mrezakhalafi') {
+            abort(403);
+        }
+    Lalu deklarasikan middleware barunya di App\Http\Kernel.php pada $routeMiddleware
+        'admin' => \App\Http\Middleware\IsAdmin::class
+    Maka sudah bisa digunakan pada web.php ->middleware('admin');
+
+<?= 64. Gate ?>
+
+    Jika middleware untuk 1 halaman penuh, maka gunakan gate untuk sebagian dari HTML saja
+    Masuk ke app/Providers/AppServiceProvider.php lalu tambahkan 
+        use App\Models\User;
+        use Illuminate\Support\Facades\Gate;
+    Juga pada function boot()
+        Gate::define('admin', function (User $user) {
+            return $user->username === 'mrezakhalafi';
+        });
+    Maka bisa digunakan pada controller dengan 2 cara :
+
+    Cara 1 : Sama dengan middleware, dan taruh pada controller
+        $this->authorize('admin'); = Nama harus sama dengan define
+    Dan jika tidak memenuhi syarat tidak akan mengeksekusi baris di bawahnya
+    
+    Cara 2 : Special punya Gate 
+        @can('admin')
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Administrator</span>
+            </h6>
+        @endcan
+    Bagian tertentu dari HTML ini hanya bisa diakses jika memenuhi syarat dari gate admin
+
+<?= 65. Finishing WPU ?>
+
+    Bisa menyisipkan kolom pada tabel baru tanpa mengganggu tabel dan data yang udah ada 
+    Pilih F1 dan ketikan Make Migrate dan beri nama add_is_admin_to_users_table, Buat Table = No, Refer Table = Yes ke Users
+    Lalu tambahkan pada function App()
+        $table->boolean('is_admin')->default(false);
+    Ketikan pada terminal php artisan migrate (Maka akan migrate perubahan tadi saja)
+
+    Dan ubah auth()->user()->username !== 'mrezakhalafi' menjadi lebih simpel auth()->user()->is_admin 
+    return $user->username === 'mrezakhalafi' menjadi return $user->is_admin' karena butuh nilai true
+
+<? 66. Hosting ?>
+
+    
 
 ===================================================================================================================================================
