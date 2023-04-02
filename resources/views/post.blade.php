@@ -23,7 +23,13 @@
 @if ($posts->count() > 0)
 
 <div class="card mb-5">
-    <img src="https://source.unsplash.com/1200x400/?{{ $posts[0]->category->name }}" class="card-img-top" alt="...">
+    @if ($posts[0]->image)
+        <div style="max-height: 350px; overflow:hidden;">
+            <img src="{{ asset('storage/'.$posts[0]->image) }}" alt="{{  asset('storage/'.$posts[0]->image) }}" class="img-fluid">
+        </div>
+    @else
+        <img src="https://source.unsplash.com/1200x400?{{ $posts[0]->category->name }}" alt="{{ $posts[0]->category->name }}" class="img-fluid">
+    @endif
     <div class="card-body text-center">
       <h3 class="card-title"><a href="/post/{{ $posts[0]->slug }}" class="text-decoration-none text-dark">{{ $posts[0]->title }}</a></h3>
       <p class="card-text">{{ $posts[0]->excerp }}</p>
@@ -46,7 +52,11 @@
                             {{ $post->category->name }}
                         </a>
                     </div>
-                    <img src="https://source.unsplash.com/500x500/?{{ $post->category->name }}" class="card-img-top" alt="{{ $post->category->name }}">
+                    @if ($post->image)
+                        <img src="{{ asset('storage/'.$post->image) }}" alt="{{  asset('storage/'.$post->image) }}" class="img-fluid">
+                    @else
+                        <img src="https://source.unsplash.com/1200x400?{{ $post->category->name }}" alt="{{ $post->category->name }}" class="img-fluid">
+                    @endif
                     <div class="card-body">
                     <h5 class="card-title">{{ $post->title }}</h5>
                     <div class="mb-4">

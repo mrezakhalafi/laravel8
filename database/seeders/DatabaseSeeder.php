@@ -16,6 +16,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+
+        User::create([
+            "name" => "M Reza Khalafi",
+            'username' => 'mrezakhalafi',
+            "email" => "mrezakhalafi@yahoo.com",
+            "email_verified_at" => date('Y:m:d h:i:s'),
+            "password" => bcrypt('12345')
+        ]);
+
         User::factory(5)->create();
         Post::factory(20)->create();
 
@@ -50,12 +59,5 @@ class DatabaseSeeder extends Seeder
             "name" => "Category 1",
             "slug" => "category-1",
         ]);
-
-        // User::create([
-        //     "name" => "M Reza Khalafi",
-        //     "email" => "mrezakhalafi@yahoo.com",
-        //     "email_verified_at" => date('Y:m:d h:i:s'),
-        //     "password" => bcrypt('12345')
-        // ]);
     }
 }

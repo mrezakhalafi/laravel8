@@ -667,8 +667,45 @@ Struktur
     Baru masukan ke validasi 
         $validateData = $request->validate($rules);
     
-<?= 57. Upload Image ?>
+<?= 57. Upload Image Path ?>
 
-    
+    Secara default file upload disimpan pada folder /storage/app/nama-folder
+    Konfigurasinya ada di folder config/filesystems.php di bagian 
+        'default' => env('FILESYSTEM_DRIVER', 'local')
+    Ubah menjadi public, local/public penjelasannya ada di bagian bawah file   
+    Bisa juga ditaruh di file .env
+        FILESYSTEM_DRIVER=public
+    Maka akan tersimpan di /storage/app/public/nama-folder (Masih Bukan Public Utama)
+    Hubungkan akses keduanya dengan Symbolic Link
+        php artisan storage:link
+    Maka muncul folder storage pada public utama dan gambar bisa diakses di URL browser 
+        http://127.0.0.1:8000/storage/pos-images/JWBskJnWG31zmzil6BXsw4qHkemayt2UADpRsDt8.jpg
+
+<?= 58. Image Validation ?>
+
+    'image' => 'image|file|max:1024',
+    Wajib file sebelum max, karena jika ada file dianggap ukuran kalo gaada file dianggap text length
+
+<?= 59. Image Upload ?>
+
+    Tambahkan enctype=multipart seperti form biasa, lalu pada controller tambahkan pada $validateData
+        if ($request->file('image')) {
+            $validateData['image'] = $request->file('image')->store('post-images');
+        }
+    'image' = name, 'post-images' = folder yang otomatis dibuat jika tidak ada, hanya berjalan jika ada request file image
+    Upload seperti biasa Post::create($validateData);
+
+<?= 60. Show Image From DB ?>
+
+    @if ($post->image)
+        <div style="max-height: 350px; overflow:hidden;">
+            <img src="{{ asset('storage/' . $post->image) }}" alt="{{  asset('storage/' . $post->image) }}" class="img-fluid" mt-4>
+        </div>
+    @else
+        <img src="https://source.unsplash.com/1200x400?{{ $post->category->name }}" alt="{{ $post->category->name }}" class="img-fluid" mt-4>
+    @endif
+    Jika ada tampilkan gambar dari DB, jika tidak ada tampilkan gambar default
+
+<?= 61. ?>
 
 ===================================================================================================================================================
