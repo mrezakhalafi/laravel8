@@ -604,7 +604,6 @@ Struktur
             e.preventDefault();
         })
 
-
 <?= 51. Limit String ?>
 
     Include dulu 
@@ -612,6 +611,64 @@ Struktur
     Gunakan dengan 
         $validateData['excerp'] = Str::limit($request->body, 100, '...');
 
-<?= 52. ?>
+<?= 52. Delete Data ?>
+
+    Buat form pada HTML nya 
+         <form action="/dashboard/posts/{{ $post->slug }}" method="post" class="d-inline">
+            @method('delete') = Hijack dengan method delete
+            @csrf
+            <button class="badge bg-danger border-0" onclick="return confirm('Are you sure?')"><span data-feather="x-circle"></span></button>
+        </form>
+    Tidak usah menambahkan apapun di routes, karena sudah Resource Controller 
+    Langsung ke controller method destroy() 
+        Post::destroy($post->id);
+        return redirect('/dashboard/posts')->with('success', 'Post has been deleted.');
+
+<?= 53. Show Data Edit ?>
+
+    A href pada HTML harus seperti ini, karena mengikuti routes laravel pada php artisan route:list
+         <a href="/dashboard/posts/{{ $post->slug }}/edit" class="badge bg-warning"><span data-feather="edit"></span></a> = /Edit di belakang
+    Lalu pada controller pada function edit()
+         return view('dashboard/posts/edit', [
+            'post' => $post,
+            'categories' => Category::all()
+        ]);
+
+<?= 54. Old Value & Edit Data Value ?>
+
+    value="{{ old('title', $post->title) }}"
+    Dengan pembacaan, ada tidak data old? Kalo tidak ada ambil data dari controller
+    Untuk edit, pada awalnya akan mengambil data edit dan jika validasi error maka akan mengambil yang baru diketik
+
+<?= 55. Update Data ?>
+
+    Hijack post dengan method bisa put/patch 
+        <form method="POST" action="/dashboard/posts/{{ $post->slug }}" class="mb-5">
+                @method('put')
+        </form>
+    Lalu pada controller cukup tambahkan pada function update() 
+        Post::where('id', $post->id)
+            ->update($validateData);
+    Dengan $validateData adalah validasi yang sama dengan insert 
+
+<?= 56. Update Data With Unique (Not Updated) ?>
+
+    Jika ada kasus update data dengan kolom unique, dan kita tidak mengeditnya maka akan tertahan validasi karena sudah ada di DB
+    Untuk mengakalinya bisa dengan membuat $validateData terpisah menjadi $rules
+         $rules = [
+            'title' => 'required|max:255',
+            'category_id' => 'required',
+            'body' => 'required'
+        ];
+    Buat if khusus di bawahnya 
+        if ($request->slug != $post->slug) {
+            $rules['slug'] = 'required|unique:posts';
+        }
+    Baru masukan ke validasi 
+        $validateData = $request->validate($rules);
+    
+<?= 57. Upload Image ?>
+
+    
 
 ===================================================================================================================================================
